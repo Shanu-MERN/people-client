@@ -5,12 +5,21 @@ import axios from "axios";
 function User() {
   var { id } = useParams();
   const [Userdata, setUserdata] = useState({});
+  const [Loading, setLoading] = useState(true);
+
   useEffect(() => {
     axios
       .get("http://localhost:3000/" + --id)
-      .then((res) => setUserdata(res.data))
-      .catch((err) => console.log(err));
+      .then((res) => {
+        setUserdata(res.data), setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err), setLoading(false);
+      });
   }, [id]);
+
+  if (Userdata.length === 0) return <div className="App">No data found</div>;
+  if (Loading) return <div className="App">Loading...</div>;
 
   return (
     <div className="App">
